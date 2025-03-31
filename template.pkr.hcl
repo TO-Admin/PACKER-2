@@ -19,6 +19,9 @@ build {
 
   provisioner "shell" {
     inline = [
+      "sudo add-apt-repository universe -y",
+      "sudo apt-get update -y || sleep 30 && sudo apt-get update -y", 
+      "sudo apt-get install fail2ban -y",
       "sudo apt-get update && sudo apt-get upgrade -y",
       "sudo apt-get install fail2ban -y",
       "sudo sed -i 's/PermitRootLogin yes/PermitRootLogin no/' /etc/ssh/sshd_config",
