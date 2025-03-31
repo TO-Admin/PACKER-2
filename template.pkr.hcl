@@ -19,7 +19,7 @@ build {
 
   provisioner "shell" {
     inline = [
-      "sudo apt install python3-devel 2to3 -y",
+      "sudo apt-get install python3-devel 2to3 -y",
       "cd /tmp && curl -LO https://github.com/fail2ban/fail2ban/archive/refs/tags/1.0.2.tar.gz",
       "tar xzf 1.0.2.tar.gz && cd fail2ban-1.0.2",
       "./fail2ban-2to3 && python3 setup.py build",
