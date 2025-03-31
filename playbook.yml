@@ -1,0 +1,25 @@
+---
+- hosts: all
+  become: yes
+
+  tasks:
+    - name: Créer un utilisateur sécurisé
+      user:
+        name: secure_user
+        shell: /bin/bash
+
+    - name: Activer la journalisation des connexions SSH
+      lineinfile:
+        path: /etc/ssh/sshd_config
+        regexp: '^#?LogLevel'
+        line: 'LogLevel VERBOSE'
+
+    - name: Installer Auditd pour surveiller les accès root
+      apt:
+        name: auditd
+        state: present
+
+    - name: Redémarrer SSH pour appliquer les modifications
+      service:
+        name: sshd
+        state: restarted
