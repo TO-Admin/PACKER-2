@@ -2,8 +2,8 @@ name: Build and Test AMI
 
 on:
   push:
-    branches:
-      - main
+    paths:
+      - template.pkr.hcl
 
 jobs:
   build:
