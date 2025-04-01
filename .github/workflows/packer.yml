@@ -8,16 +8,22 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      # Étape 1 : Récupérer le code source
       - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: Setup Packer
+      # Étape 2 : Installer Packer
+      - name: Install Packer
         uses: hashicorp/setup-packer@v2
 
+      # Étape 3 : Initialiser les plugins Packer
+      - name: Initialize Packer plugins
+        run: packer init template.pkr.hcl
+
+      # Étape 4 : Valider le template Packer
       - name: Validate Packer template
         run: packer validate template.pkr.hcl
 
+      # Étape 5 : Construire l'AMI avec Packer
       - name: Build AMI with Packer
         run: packer build template.pkr.hcl
-
-      # Ajoute ici des étapes pour tester l'AMI si nécessaire.
