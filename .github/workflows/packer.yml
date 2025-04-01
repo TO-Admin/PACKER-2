@@ -12,6 +12,13 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
+         # Étape 2 : Créer le fichier de clé privée
+      - name: Create SSH private key file
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/packer_key.pem
+          chmod 600 ~/.ssh/packer_key.pem
+
       # Étape 2 : Installer Packer
       - name: Install Packer
         uses: hashicorp/setup-packer@v2
