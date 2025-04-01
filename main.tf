@@ -17,6 +17,24 @@ resource "aws_subnet" "private" {
   cidr_block        = "10.0.2.0/24"
 }
 
+resource "aws_internet_gateway" "main" {
+  vpc_id = aws_vpc.main.id
+}
+
+resource "aws_route_table" "public_rt" {
+  vpc_id = aws_vpc.main.id
+
+  route {
+    cidr_block = "0.0.0.0/0"
+    gateway_id = aws_internet_gateway.main.id
+  }
+}
+
+resource "aws_route_table_association" "public_rt_assoc" {
+  subnet_id      = aws_subnet.public.id
+  route_table_id = aws_route_table.public_rt.id
+}
+
 resource "aws_security_group" "ec2_sg" {
   vpc_id = aws_vpc.main.id
 
@@ -24,7 +42,7 @@ resource "aws_security_group" "ec2_sg" {
     from_port   = 22
     to_port     = 22
     protocol    = "tcp"
-    cidr_blocks = ["YOUR_IP/32"] # Remplace par ton IP publique
+    cidr_blocks = ["0.0.0.0/0"] # Remplace par ton IP publique
   }
 
   egress {
@@ -36,8 +54,9 @@ resource "aws_security_group" "ec2_sg" {
 }
 
 resource "aws_instance" "secure_ec2" {
-  ami           = ""
+  ami           = "ami-07e4522c344722f18"
   instance_type = "t2.micro"
-  subnet_id     = aws_subnet.private.id
-  security_groups = [aws_security_group.ec2_sg.name]
+  subnet_id     = aws_subnet.public.id
+  associate_public_ip_address = true
+  vpc_security_group_ids = [aws_security_group.ec2_sg.id]
 }
