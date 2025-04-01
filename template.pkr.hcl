@@ -12,6 +12,8 @@ source "amazon-ebs" "example" {
     owners      = ["099720109477"]
   }
   ssh_username = "ubuntu"
+  ssh_keypair_name        = "packer_key"
+  ssh_private_key_file    = "~/.ssh/packer_key"
 }
 
 build {
