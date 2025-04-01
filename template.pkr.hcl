@@ -1,5 +1,5 @@
 source "amazon-ebs" "example" {
-  ami_name      = "tp-2"
+  ami_name      = "secure-lightweight-ami"
   instance_type = "t2.micro"
   region        = "eu-west-1"
   source_ami_filter {
