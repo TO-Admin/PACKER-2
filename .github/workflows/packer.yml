@@ -1,9 +1,7 @@
 name: Build and Test AMI
 
 on:
-  push:
-    paths:
-      - template.pkr.hcl
+  workflow_dispatch: #
 
 jobs:
   build:
