@@ -1,5 +1,5 @@
 source "amazon-ebs" "example" {
-  ami_name      = "test"
+  ami_name      = "test-pipeline"
   instance_type = "t2.micro"
   region        = "eu-west-1"
   source_ami_filter {
