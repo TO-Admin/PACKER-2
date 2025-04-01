@@ -1,3 +1,12 @@
+packer {
+  required_plugins {
+    amazon = {
+      version = ">= 1.0.0"
+      source  = "github.com/hashicorp/amazon"
+    }
+  }
+}
+
 source "amazon-ebs" "example" {
   ami_name      = "secure-lightweight-ami"
   instance_type = "t2.micro"
