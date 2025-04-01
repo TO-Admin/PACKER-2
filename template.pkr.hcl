@@ -1,7 +1,7 @@
 source "amazon-ebs" "example" {
-  ami_name      = "secure-lightweight-ami"
+  ami_name      = "tp-2"
   instance_type = "t2.micro"
-  region        = "eu-west-3" # Remplace par ta région AWS
+  region        = "eu-west-1"
   source_ami_filter {
     filters = {
       name                = "ubuntu/images/hvm-ssd/ubuntu-focal-20.04-amd64-server-*"
@@ -9,7 +9,7 @@ source "amazon-ebs" "example" {
       virtualization-type = "hvm"
     }
     most_recent = true
-    owners      = ["099720109477"] # Canonical, propriétaire des AMIs Ubuntu
+    owners      = ["099720109477"]
   }
   ssh_username = "ubuntu"
 }
