@@ -54,7 +54,7 @@ resource "aws_security_group" "ec2_sg" {
 }
 
 resource "aws_instance" "secure_ec2" {
-  ami           = "ami-07e4522c344722f18"
+  ami           = "ami-067ef56169a0a1fe0"
   instance_type = "t2.micro"
   subnet_id     = aws_subnet.public.id
   associate_public_ip_address = true
