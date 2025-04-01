@@ -1,0 +1,25 @@
+name: Build and Test AMI
+
+on:
+  push:
+    paths:
+      - template.pkr.hcl
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Setup Packer
+        uses: hashicorp/setup-packer@v2
+
+      - name: Validate Packer template
+        run: packer validate template.pkr.hcl
+
+      - name: Build AMI with Packer
+        run: packer build template.pkr.hcl
+
+      # Ajoute ici des étapes pour tester l'AMI si nécessaire.
