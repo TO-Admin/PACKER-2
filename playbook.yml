@@ -1,25 +1,53 @@
 ---
-- hosts: all
+- name: Configuration de l'instance Ubuntu
+  hosts: all
   become: yes
+  vars:
+    fail2ban_config:
+      - regex: PermitRootLogin yes
+        replace: PermitRootLogin no
 
   tasks:
-    - name: Créer un utilisateur sécurisé
-      user:
-        name: secure_user
-        shell: /bin/bash
+    - name: Ajout du dépôt Universe
+      apt_repository:
+        repo: deb http://archive.ubuntu.com/ubuntu focal universe
+        update_cache: yes
 
-    - name: Activer la journalisation des connexions SSH
-      lineinfile:
-        path: /etc/ssh/sshd_config
-        regexp: '^#?LogLevel'
-        line: 'LogLevel VERBOSE'
-
-    - name: Installer Auditd pour surveiller les accès root
+    - name: Mise à jour du cache apt (avec retry)
       apt:
-        name: auditd
+        update_cache: yes
+      register: result
+      until: result is succeeded
+      retries: 3
+      delay: 10
+
+    - name: Installation de fail2ban
+      apt:
+        name: fail2ban
         state: present
 
-    - name: Redémarrer SSH pour appliquer les modifications
+    - name: Mise à jour complète du système
+      apt:
+        upgrade: dist
+        update_cache: yes
+
+    - name: Configuration SSH
+      lineinfile:
+        path: /etc/ssh/sshd_config
+        regexp: "{{ item.regex }}"
+        line: "{{ item.replace }}"
+        validate: /usr/sbin/sshd -T -f %s
+      loop: "{{ fail2ban_config }}"
+      notify:
+        - Restart SSH
+
+    - name: Nettoyage des paquets
+      apt:
+        autoremove: yes
+        autoclean: yes
+
+  handlers:
+    - name: Restart SSH
       service:
         name: sshd
         state: restarted
