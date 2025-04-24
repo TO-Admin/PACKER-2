@@ -27,11 +27,13 @@ packer {
 
 build {
   sources = ["source.amazon-ebs.example"]
+
   provisioner "ansible" {
-    playbook_file = "playbook.yml"
-    user = "ec2-user"
-    use_sftp = true
-    sftp_command = "/usr/libexec/openssh/sftp-server -e"
+    playbook_file   = "playbook.yml"
+    user            = "ubuntu"
+    extra_arguments = [
+      "--extra-vars", "ansible_python_interpreter=/usr/bin/python3"
+    ]
   }
 }
 
