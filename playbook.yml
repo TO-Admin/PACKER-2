@@ -10,6 +10,22 @@
         repo: deb http://archive.ubuntu.com/ubuntu focal universe
         update_cache: yes
 
+    - name: Créer un utilisateur sécurisé
+      user:
+        name: secure_user
+        shell: /bin/bash
+
+    - name: Activer la journalisation des connexions SSH
+      lineinfile:
+        path: /etc/ssh/sshd_config
+        regexp: '^#?LogLevel'
+        line: 'LogLevel VERBOSE'
+
+    - name: Installer Auditd pour surveiller les accès root
+      apt:
+        name: auditd
+        state: present
+
     - name: Mise à jour des paquets (avec retry)
       apt:
         update_cache: yes
