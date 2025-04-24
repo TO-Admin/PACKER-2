@@ -1,45 +1,44 @@
 ---
-- name: Configuration de l'instance Ubuntu
+- name: Configuration de l'AMI Ubuntu
   hosts: all
   become: yes
-  vars:
-    fail2ban_config:
-      - regex: PermitRootLogin yes
-        replace: PermitRootLogin no
+  gather_facts: no
 
   tasks:
-    - name: Ajout du dépôt Universe
+    - name: Activer le dépôt Universe
       apt_repository:
         repo: deb http://archive.ubuntu.com/ubuntu focal universe
         update_cache: yes
 
-    - name: Mise à jour du cache apt (avec retry)
+    - name: Mise à jour des paquets (avec retry)
       apt:
         update_cache: yes
-      register: result
-      until: result is succeeded
+      register: apt_update
+      until: apt_update is succeeded
       retries: 3
-      delay: 10
+      delay: 15
 
-    - name: Installation de fail2ban
+    - name: Installer Fail2ban
       apt:
         name: fail2ban
-        state: present
+        state: latest
 
     - name: Mise à jour complète du système
       apt:
         upgrade: dist
         update_cache: yes
 
-    - name: Configuration SSH
+    - name: Sécuriser la configuration SSH
       lineinfile:
         path: /etc/ssh/sshd_config
         regexp: "{{ item.regex }}"
-        line: "{{ item.replace }}"
+        line: "{{ item.line }}"
         validate: /usr/sbin/sshd -T -f %s
-      loop: "{{ fail2ban_config }}"
+      loop:
+        - { regex: '^#?PermitRootLogin', line: 'PermitRootLogin no' }
+        - { regex: '^#?PasswordAuthentication', line: 'PasswordAuthentication no' }
       notify:
-        - Restart SSH
+        - Redémarrer SSH
 
     - name: Nettoyage des paquets
       apt:
@@ -47,7 +46,7 @@
         autoclean: yes
 
   handlers:
-    - name: Restart SSH
+    - name: Redémarrer SSH
       service:
         name: sshd
         state: restarted
