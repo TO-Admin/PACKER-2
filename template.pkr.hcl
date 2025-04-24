@@ -26,19 +26,12 @@ packer {
 }
 
 build {
-  sources = ["source.amazon-ebs.example"]
-
-  provisioner "shell" {
-    inline = [
-      "sudo add-apt-repository universe -y",
-      "sudo apt-get update -y || sleep 30 && sudo apt-get update -y", 
-      "sudo apt-get install fail2ban -y",
-      "sudo apt-get update && sudo apt-get upgrade -y",
-      "sudo apt-get install fail2ban -y",
-      "sudo sed -i 's/PermitRootLogin yes/PermitRootLogin no/' /etc/ssh/sshd_config",
-      "sudo systemctl restart sshd",
-      "sudo apt-get autoremove -y && sudo apt-get clean",
-    ]
+  sources = ["source.amazon-ebs.tp-packer"]
+  provisioner "ansible" {
+    playbook_file = "playbook.yml"
+    user = "ec2-user"
+    use_sftp = true
+    sftp_command = "/usr/libexec/openssh/sftp-server -e"
   }
 }
 
