@@ -18,7 +18,7 @@ jobs:
       - name: Create SSH private key file
         run: |
           mkdir -p ~/.ssh
-          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/packer_key.pem
+          echo "${{ secrets.PACKER_KEY_PEM }}" > ~/.ssh/packer_key.pem
           chmod 600 ~/.ssh/packer_key.pem
 
       # Étape 2 : Installer Packer
