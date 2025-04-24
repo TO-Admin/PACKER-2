@@ -32,7 +32,8 @@ build {
     playbook_file   = "playbook.yml"
     user            = "ubuntu"
     extra_arguments = [
-      "--extra-vars", "ansible_python_interpreter=/usr/bin/python3"
+      "--extra-vars", "ansible_python_interpreter=/usr/bin/python3",
+      "--scp-extra-args", "'-O'"
     ]
   }
 }
