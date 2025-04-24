@@ -1,5 +1,5 @@
 source "amazon-ebs" "example" {
-  ami_name      = "test6-pipeline"
+  ami_name      = "test7-pipeline"
   instance_type = "t2.micro"
   region        = "eu-west-1"
   source_ami_filter {
@@ -12,8 +12,8 @@ source "amazon-ebs" "example" {
     owners      = ["099720109477"]
   }
   ssh_username = "ubuntu"
-  # ssh_keypair_name        = "packer_key"
-  # ssh_private_key_file    = "~/.ssh/packer_key.pem"
+  ssh_keypair_name        = "packer_key"
+  ssh_private_key_file    = "~/.ssh/packer_key.pem"
 }
 
 packer {
