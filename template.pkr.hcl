@@ -1,5 +1,5 @@
 source "amazon-ebs" "example" {
-  ami_name      = "test5-pipeline"
+  ami_name      = "test4-pipeline"
   instance_type = "t2.micro"
   region        = "eu-west-1"
   source_ami_filter {
@@ -26,7 +26,7 @@ packer {
 }
 
 build {
-  sources = ["source.amazon-ebs.tp-packer"]
+  sources = ["source.amazon-ebs.example"]
   provisioner "ansible" {
     playbook_file = "playbook.yml"
     user = "ec2-user"
